@@ -37,8 +37,8 @@ preferences {
 }
 
 def pageAddSwitch() {
-	dynamicPage(name: "pageAddSwitch", title: "Add Stateless Virtual Switch Results", install: false, uninstall: false) {
-    	def repsonse = addStatelessVirtualSwitch()
+    dynamicPage(name: "pageAddSwitch", title: "Add Stateless Virtual Switch Results", install: false, uninstall: false) {
+        def repsonse = addStatelessVirtualSwitch()
         section {paragraph repsonse}
     }
 }
@@ -49,43 +49,43 @@ def addStatelessVirtualSwitch(){
     def result
     
     try {
-		def childDevice = addChildDevice(nameSpace, svsDeviceName(), deviceID, null, [name: deviceID, label: svsName, completedSetup: true])
-		log.debug "Created Switch ${svsName}: ${deviceID}"
+        def childDevice = addChildDevice(nameSpace, svsDeviceName(), deviceID, null, [name: deviceID, label: svsName, completedSetup: true])
+        log.debug "Created Switch ${svsName}: ${deviceID}"
         result ="The Stateless Virtual Switch named '${svsName}' has been created."
     } 
     catch (e) {
-		log.debug "Error creating switch: ${e}"
+        log.debug "Error creating switch: ${e}"
         result = "Houston, we have a problem"
-	}
+    }
     
-	return result   
+    return result   
 }
 
 def addBtn() { 
-	return "https://raw.githubusercontent.com/mcgarryplace-michael/SmartThingsPublic/master/img/add-btn.png" 
+    return "https://raw.githubusercontent.com/mcgarryplace-michael/SmartThingsPublic/master/img/add-btn.png" 
 }
 
 def newDeviceID() {
     def deviceID = String.format("SVS_%02d", networkID)
-	log.debug "New Device ID: ${deviceID}"
+    log.debug "New Device ID: ${deviceID}"
     deviceID
 }
 
 def svsDeviceName() {
-	return "Stateless Virtual Switch"
+    return "Stateless Virtual Switch"
 }
 
 def installed() {
-	log.debug "Installed with settings: ${settings}"
+    log.debug "Installed with settings: ${settings}"
 
-	initialize()
+    initialize()
 }
 
 def updated() {
-	log.debug "Updated with settings: ${settings}"
+    log.debug "Updated with settings: ${settings}"
 
-	unsubscribe()
-	initialize()
+    unsubscribe()
+    initialize()
 }
 
 def initialize() {
