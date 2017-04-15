@@ -26,11 +26,10 @@ definition(
 
 preferences {
     page(name: "inputPage", title: "Adds a Stateless Virtual Switch", install: false, uninstall: false) {
-        section("Define Stateless Virtual Switch") {
+        section("Stateless Virtual Switch") {
             input "svsName", "text", title: "Switch Name", required: true
-            input "networkID", "text", title: "Network ID", required: true
-
-            href "pageAddSwitch", title: "Add Switch", description: "Tap to add this switch"
+            input "networkID", "number", title: "Network ID", required: true
+            href "pageAddSwitch", title: "Add Switch", description: "Tap to add this switch", image: addBtn()
         }
     }
     
@@ -39,26 +38,18 @@ preferences {
 
 def pageAddSwitch() {
 	dynamicPage(name: "pageAddSwitch", title: "Add Stateless Virtual Switch Results", install: false, uninstall: false) {
-    	def repsonse
-        
-        if (getChildDevices().find{it.label == svsName}) {
-            repsonse = "There is already a switch labled '${svsName}'.\n\nTap Done to go back and change the switch label name."
-        }
-        else {
-            repsonse = addStatelessVirtualSwitch()
-        }
-        
+    	def repsonse = addStatelessVirtualSwitch()
         section {paragraph repsonse}
     }
 }
 
 def addStatelessVirtualSwitch(){
-    def deviceID = "SVS_${networkID}"
+    def deviceID = newDeviceID()
     def nameSpace = "mcgarryplace-michael"
     def result
     
     try {
-		def childDevice = addChildDevice(nameSpace, "Stateless Virtual Switch", deviceID, null, [name: deviceID, label: svsName, completedSetup: true])
+		def childDevice = addChildDevice(nameSpace, svsDeviceName(), deviceID, null, [name: deviceID, label: svsName, completedSetup: true])
 		log.debug "Created Switch ${svsName}: ${deviceID}"
         result ="The Stateless Virtual Switch named '${svsName}' has been created."
     } 
@@ -67,7 +58,21 @@ def addStatelessVirtualSwitch(){
         result = "Houston, we have a problem"
 	}
     
-	result   
+	return result   
+}
+
+def addBtn() { 
+	return "https://raw.githubusercontent.com/mcgarryplace-michael/SmartThingsPublic/master/img/add-btn.png" 
+}
+
+def newDeviceID() {
+    def deviceID = String.format("SVS_%02d", networkID)
+	log.debug "New Device ID: ${deviceID}"
+    deviceID
+}
+
+def svsDeviceName() {
+	return "Stateless Virtual Switch"
 }
 
 def installed() {
@@ -84,7 +89,5 @@ def updated() {
 }
 
 def initialize() {
-	// TODO: subscribe to attributes, devices, locations, etc.
 }
 
-// TODO: implement event handlers
