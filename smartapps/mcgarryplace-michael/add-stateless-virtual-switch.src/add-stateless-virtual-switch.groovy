@@ -25,19 +25,16 @@ definition(
 
 
 preferences {
-    page name: "inputPage"
-    page name: "pageAddSwitch"
-}
+    page(name: "inputPage", title: "Adds a Stateless Virtual Switch", install: false, uninstall: false) {
+        section("Define Stateless Virtual Switch") {
+            input "svsName", "text", title: "Switch Name", required: true
+            input "networkID", "text", title: "Network ID", required: true
 
-def inputPage() {
-	section("Define Stateless Virtual Switch") {
-    	input "svsName", "text", required: true
-        input "networkID", "text", required: true
-       
-        if (svsName && networkID) {
-            href "pageAddSwitch", title: "Add Switch", description: "Tap to add this switch", image: imgURL() + "add.png"
+            href "pageAddSwitch", title: "Add Switch", description: "Tap to add this switch"
         }
-	}
+    }
+    
+    page name: "pageAddSwitch"
 }
 
 def pageAddSwitch() {
