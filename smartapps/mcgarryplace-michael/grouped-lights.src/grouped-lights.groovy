@@ -25,26 +25,26 @@ definition(
 
 
 preferences {
-	section("Stateless Virtual Switch") {
-    	input "svsMaster", "capability.switch", required: true
-	}
+    section("Stateless Virtual Switch") {
+        input "svsMaster", "capability.switch", required: true
+    }
     
     section("Lights") {
-    	input "lights", "capability.switch", multiple: true
+        input "lights", "capability.switch", multiple: true
     }
 }
 
 def installed() {
-	log.debug "Installed with settings: ${settings}"
+    log.debug "Installed with settings: ${settings}"
 
-	initialize()
+    initialize()
 }
 
 def updated() {
-	log.debug "Updated with settings: ${settings}"
+    log.debug "Updated with settings: ${settings}"
 
-	unsubscribe()
-	initialize()
+    unsubscribe()
+    initialize()
 }
 
 def initialize() {
@@ -53,11 +53,11 @@ def initialize() {
 }
 
 def svsMasterOnHandler(evt) {
-	log.debug "svsMasterOnHandler called: $evt"
+    log.debug "svsMasterOnHandler called: $evt"
     lights?.on()
 }
 
 def svsMasterOffHandler(evt) {
-	log.debug "svsMasterOffHandler called: $evt"
+    log.debug "svsMasterOffHandler called: $evt"
     lights?.off()
 }
