@@ -21,6 +21,8 @@ metadata {
 		capability "Actuator"
 		capability "Switch"
 		capability "Sensor"
+        
+		attribute "info", "string"
 	}
 
 	// simulator metadata
@@ -29,26 +31,40 @@ metadata {
 
 	// UI tile definitions
 	tiles {
+		standardTile("button", "device.button", width: 1, height: 1) {
+			state "default", label: "", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffffff"
+		}
+    
  		standardTile("pushOn", "device.button", width: 1, height: 1, decoration: "flat") {
-			state "default", label: "On", backgroundColor: "#ffffff", action: "pushOn"
+			state "default", label: "On", backgroundColor: "#ffffff", action: "on"
 		} 
         
  		standardTile("pushOff", "device.button", width: 1, height: 1, decoration: "flat") {
-			state "default", label: "Off", backgroundColor: "#ffffff", action: "pushOff"
+			state "default", label: "Off", backgroundColor: "#ffffff", action: "off"
 		}   
         
-		main (["pushOn", "pushOff"])
-		details (["pushOn", "pushOff"])
+        valueTile("information", "device.info", inactiveLabel: false, decoration: "flat", width: 6, height:2) {
+            state "info", label:'${currentValue}'
+		}
+        
+		main "button"
+		details (["pushOn", "pushOff", "information"])
 	}
+}
+
+def installed() {
+	sendEvent(name: "info", value: "Greetings and Salutations.") 
 }
 
 def parse(String description) {
 }
 
-def pushOn() {
-	sendEvent(name: "switch", value: "on", isStateChange: true)
+def on() {
+	sendEvent(name: "switch", value: "on", isStateChange: true, displayed: false)
+	sendEvent(name: "info", value: "Sending On Command", isStateChange: true, displayed: true) 
 }
 
-def pushOff() {
-	sendEvent(name: "switch", value: "off", isStateChange: true)
+def off() {
+	sendEvent(name: "switch", value: "off", isStateChange: true, displayed: false)
+	sendEvent(name: "info", value: "Sending Off Command", isStateChange: true, displayed: true) 
 }
